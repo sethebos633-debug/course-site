@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Course PDFs</title>
+</head>
+<body style="font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 20px;">
+
+  <h1>Courses</h1>
+
+  <!-- SUBJECT SELECTOR -->
+  <p>
+    <label for="subjectSelect"><strong>Subject:</strong></label>
+    <select id="subjectSelect" onchange="onSubjectChange()">
+      <option value="calculus" selected>Calculus</option>
+      <option value="advanced-functions">Advanced Functions</option>
+      <option value="data-management">Data Management</option>
+    </select>
+
+    &nbsp;&nbsp;
+
+    <label for="lessonSelect"><strong>Lesson:</strong></label>
+    <select id="lessonSelect" onchange="onLessonChange()">
+      <option value="lesson1" selected>Lesson 1</option>
+      <option value="lesson2">Lesson 2</option>
+    </select>
+  </p>
+
+  <hr>
+
+  <h2 id="title">Calculus — Lesson 1</h2>
+
+  <!-- LESSON PDF -->
+  <h3>Lesson</h3>
+  <iframe
+    id="lessonFrame"
+    src=""
+    width="100%"
+    height="520"
+    style="border:1px solid #ccc;"
+  ></iframe>
+
+  <!-- HOMEWORK / SOLUTIONS BUTTONS -->
+  <p>
+    <button onclick="toggle('homeworkWrap')">Homework</button>
+    <button onclick="toggle('solutionsWrap')">Solutions</button>
+  </p>
+
+  <div id="homeworkWrap" style="display:none;">
+    <h3>Homework</h3>
+    <iframe
+      id="homeworkFrame"
+      src=""
+      width="100%"
+      height="520"
+      style="border:1px solid #ccc;"
+    ></iframe>
+  </div>
+
+  <div id="solutionsWrap" style="display:none;">
+    <h3>Solutions</h3>
+    <iframe
+      id="solutionsFrame"
+      src=""
+      width="100%"
+      height="520"
+      style="border:1px solid #ccc;"
+    ></iframe>
+  </div>
+
+  <script>
+    const SUBJECT_NAMES = {
+      "calculus": "Calculus",
+      "advanced-functions": "Advanced Functions",
+      "data-management": "Data Management",
+    };
+
+    function toggle(id) {
+      const el = document.getElementById(id);
+      el.style.display = (el.style.display === "none") ? "block" : "none";
+    }
+
+    function closeHomeworkSolutions() {
+      document.getElementById("homeworkWrap").style.display = "none";
+      document.getElementById("solutionsWrap").style.display = "none";
+    }
+
+    function updateView() {
+      const subject = document.getElementById("subjectSelect").value;
+      const lesson = document.getElementById("lessonSelect").value;
+
+      // Update title
+      document.getElementById("title").textContent =
+        `${SUBJECT_NAMES[subject]} — ${lesson.replace("lesson", "Lesson ")}`;
+
+      // Build base path (IMPORTANT: matches your folder structure)
+      const base = `pdfs/${subject}/${lesson}/`;
+
+      // Update iframe sources
+      document.getElementById("lessonFrame").src = base + "math.pdf";
+      document.getElementById("homeworkFrame").src = base + "homework.pdf";
+      document.getElementById("solutionsFrame").src = base + "solutions.pdf";
+    }
+
+    function onSubjectChange() {
+      closeHomeworkSolutions();
+      updateView();
+    }
+
+    function onLessonChange() {
+      closeHomeworkSolutions();
+      updateView();
+    }
+
+    // Initial load
+    updateView();
+  </script>
+
+</body>
+</html>
